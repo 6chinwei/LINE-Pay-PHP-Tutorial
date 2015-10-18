@@ -23,7 +23,7 @@ class LinePayAPI {
         $reserveParams = new LinePayAPIReserveParams($params);
 
         $ch = curl_init();     
-        curl_setopt($ch, CURLOPT_URL, $this->apiEndpoint);
+        curl_setopt($ch, CURLOPT_URL, $this->apiEndpoint . 'request');
         curl_setopt($ch, CURLOPT_POST, true); 
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($reserveParams->getParams()));   
         curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
@@ -86,6 +86,7 @@ class LinePayAPIReserveParams {
         // Optional
         'confirmUrlType' => '',
         'checkConfirmUrlBrow' => '',
+        'capture' => '',
     ];
     
     public function __construct($params)

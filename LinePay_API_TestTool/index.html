@@ -16,9 +16,19 @@
 
                     responseObj = JSON.parse(response);
                     if(responseObj.returnCode == "0000") {
-                        $responseInfo.siblings('#nextStep').attr('href', responseObj.info.paymentUrl.web).show();
+                        $responseInfo.siblings('#toStep2').attr('href', responseObj.info.paymentUrl.web).show();
                     }
                 });
+            });
+
+            $('#toStep2').click(function() {
+                $('#steps').find('#step-1').removeClass('active').end()
+                           .find('#step-2').addClass('active');
+            });
+
+            $('#toStep3').click(function() {
+                $('#steps').find('#step-2').removeClass('active').end()
+                           .find('#step-3').addClass('active');
             });
         });
         </script>
@@ -39,17 +49,17 @@
                 </div>
             </div>
 
-            <div class="steps">
+            <div id="steps">
                 <ul class="step">
-                    <li class="step-item active">
+                    <li class="step-item active" id="step-1">
                         <h6 class="step-title">Payment Reserve</h6>
                         <p class="step-text">Payment Reserve</p>
                     </li>
-                    <li class="step-item">
+                    <li class="step-item" id="step-2">
                         <h6 class="step-title">Authentication</h6>
                         <p class="step-text">Authentication</p>
                     </li>
-                    <li class="step-item">
+                    <li class="step-item" id="step-3">
                         <h6 class="step-title">Payment Confirm</h6>
                         <p class="step-text">Payment Confirm</p>
                     </li>
@@ -65,7 +75,7 @@
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">Line Pay API Server</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="apiEndpoint" value="https://sandbox-api-pay.line.me/v2/payments/request">
+                                <input type="text" class="ctrl-input" name="apiEndpoint" value="https://sandbox-api-pay.line.me/v2/payments/">
                             </div>
                         </div>
                         <div class="ctrl-grp columns-12">
@@ -151,7 +161,7 @@
                 </div>
                 <div class="panel-box">
                     <div id="responseInfo"></div>
-                    <a id="nextStep" target="_blank" style="display:none;">下一步: 登入 Line 帳戶</a>
+                    <a id="toStep2" target="_blank" style="display:none;">下一步: 登入 Line 帳戶</a>
                 </div>
             </div> 
         </div>
