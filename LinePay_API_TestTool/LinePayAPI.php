@@ -22,31 +22,38 @@ class LinePayAPI {
     public function reserve($params = []) {
         $reserveParams = new LinePayAPIReserveParams($params);
 
+        return $this->postRequest($this->apiEndpoint . 'request', $reserveParams->getParams());
+    }
+
+    public function confirm($transactionId = null, $params = []) {
+        if(is_null($transactionId))
+            throw new \Exception('transactionId is required');
+
+        $confirmParams = new LinePayAPIConfirmParams($params);
+
+        return $this->postRequest($this->apiEndpoint . $transactionId . '/confirm', $confirmParams->getParams());
+    }
+
+    protected function postRequest($url = null, $postFields = []) {
         $ch = curl_init();     
-        curl_setopt($ch, CURLOPT_URL, $this->apiEndpoint . 'request');
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, true); 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($reserveParams->getParams()));   
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postFields));   
         curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
         curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
-        curl_setopt($ch, CURLINFO_HEADER_OUT, true); 
 
-        $response = json_decode(curl_exec($ch));
+        $response = json_decode(curl_exec($ch), true);
 
         if (curl_errno($ch)) {
             throw new \Exception(curl_error($ch));
         } else {
-            echo json_encode($response, JSON_PRETTY_PRINT);
+            return $response;
         }
 
         curl_close($ch);
     }
-
-    public function confirm($params = []) {
-        $confirmParams = new LinePayAPIConfirmParams($params);
-    }
 }
-
 
 class LinePayAPIHeaders {
     protected $channelId;
@@ -73,7 +80,6 @@ class LinePayAPIHeaders {
 }
 
 class LinePayAPIReserveParams {
-    
     protected $params = [
         // Required    
         'currency' => '',
@@ -115,6 +121,33 @@ class LinePayAPIReserveParams {
     }   
 
     public function getParams() {
+        // 應該要確保所有欄位沒有多也沒有少！
+        return $this->params;
+    } 
+}
+
+class LinePayAPIConfirmParams {
+    protected $params = [
+        // Required    
+        'amount' => '',
+        'currency' => '',
+    ];
+
+    public function __construct($params)
+    {
+        if( !isset($params['amount']) ) {
+            throw new \Exception('amount is required in payment confirm');
+        }
+        else if( !isset($params['currency']) ) {
+            throw new \Exception('currency is required in payment confirm');
+        }
+        else {
+            $this->params = $params;
+        }
+    }   
+
+    public function getParams() {
+        // 應該要確保所有欄位沒有多也沒有少！
         return $this->params;
     } 
 }
