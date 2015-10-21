@@ -2,71 +2,17 @@
     <head>
         <meta charset="UTF-8">
         <title>LinePay API Test</title>
-        <!-- <link rel="stylesheet" href="./kule-grid.min.css"> -->
-        <!-- <link rel="stylesheet" href="./kule-lazy.min.css" /> -->
         <link rel="stylesheet" href="./kule-lazy-full.min.css" />
-        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script>
-        $(function() {
-            $('#reserveSubmit').click(function() {
-                $.post('./backend.php', $( "#reserveForm" ).serialize(), function(response) {
-                    $responseInfo = $('#responseInfo');
-                    $responseInfo.find('#nextStep').hide();
-                    $responseInfo.html('<pre class="code">' + response + '</pre>');
-
-                    responseObj = JSON.parse(response);
-                    if(responseObj.returnCode == "0000") {
-                        $responseInfo.siblings('#toStep2').attr('href', responseObj.info.paymentUrl.web).show();
-                    }
-                });
-            });
-
-            $('#toStep2').click(function() {
-                $('#steps').find('#step-1').removeClass('active').end()
-                           .find('#step-2').addClass('active');
-            });
-
-            $('#toStep3').click(function() {
-                $('#steps').find('#step-2').removeClass('active').end()
-                           .find('#step-3').addClass('active');
-            });
-        });
-        </script>
+        <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
     </head>
     <body>
+        <header>
+            <?php include('./header.php'); ?>
+        </header>
         <div class="container">
-            <div class="navbar">
-                <div class="navbar-header">
-                    <a class="navbar-toggle"></a>
-                    <a class="navbar-brand">LinePay API 測試工具</a>
-                </div>
-                <div class="navbar-content">
-                    <ul class="navbar-nav right">
-                        <li class="navbar-nav-item">
-                            <a class="navbar-nav-link">關於</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+            
 
-            <div id="steps">
-                <ul class="step">
-                    <li class="step-item active" id="step-1">
-                        <h6 class="step-title">Payment Reserve</h6>
-                        <p class="step-text">Payment Reserve</p>
-                    </li>
-                    <li class="step-item" id="step-2">
-                        <h6 class="step-title">Authentication</h6>
-                        <p class="step-text">Authentication</p>
-                    </li>
-                    <li class="step-item" id="step-3">
-                        <h6 class="step-title">Payment Confirm</h6>
-                        <p class="step-text">Payment Confirm</p>
-                    </li>
-                </ul>
-            </div>
-
-            <form class="form-horizontal" id="reserveForm" method="POST">
+            <form class="form-horizontal" id="reserveForm" method="POST" action="reserve.php">
                 <div class="panel">
                     <div class="panel-header">
                         <h3 class="panel-title">API 位置與商家資料</h3>
@@ -106,7 +52,7 @@
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">訂單編號</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="orderId" value="A12345">
+                                <input type="text" class="ctrl-input" name="orderId" value="A123456">
                             </div>
                         </div>
                         <div class="ctrl-grp columns-12">
@@ -128,7 +74,7 @@
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">confirmUrl</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="confirmUrl" value="http://6chinwei.cc/linepay/backend.php">
+                                <input type="text" class="ctrl-input" name="confirmUrl" value="http://6chinwei.cc/linepay/confirm.php">
                             </div>
                         </div>
                         <div class="ctrl-grp columns-12">
@@ -148,22 +94,13 @@
                         </div>
                         <div class="ctrl-grp columns-12">
                             <div class="ctrls col-9 col-offset-3">
-                                <button type="button" class="btn" id="reserveSubmit">送出</button>
+                                <!-- <button type="button" class="btn" id="reserveSubmit">送出</button> -->
+                                <input type="submit" class="btn" value="送出">
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
-
-            <div class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">LinePay 伺服器回應</h3>
-                </div>
-                <div class="panel-box">
-                    <div id="responseInfo"></div>
-                    <a id="toStep2" target="_blank" style="display:none;">下一步: 登入 Line 帳戶</a>
-                </div>
-            </div> 
         </div>
     </body>
 </html>
