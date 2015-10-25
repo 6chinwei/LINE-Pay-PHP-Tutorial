@@ -1,17 +1,14 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>LinePay API Test</title>
-        <link rel="stylesheet" href="./kule-lazy-full.min.css" />
-        <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+        <title>LinePay API - PHP Test Tool</title>
+        <link rel="stylesheet" href="./kule-lazy-full.3.0.1007beta.min.css" />
     </head>
     <body>
         <header>
             <?php include('./header.php'); ?>
         </header>
         <div class="container">
-            
-
             <form class="form-horizontal" id="reserveForm" method="POST" action="reserve.php">
                 <div class="panel">
                     <div class="panel-header">
@@ -27,13 +24,13 @@
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">商家 ID</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="channelId" value="1437558894">
+                                <input type="text" class="ctrl-input" name="channelId" value="">
                             </div>
                         </div>
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">商家密鑰</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="channelSecret" value="bbf2805a78d23d602092fdb590f99740">
+                                <input type="text" class="ctrl-input" name="channelSecret" value="">
                             </div>
                         </div>
                     </div>
@@ -94,7 +91,6 @@
                         </div>
                         <div class="ctrl-grp columns-12">
                             <div class="ctrls col-9 col-offset-3">
-                                <!-- <button type="button" class="btn" id="reserveSubmit">送出</button> -->
                                 <input type="submit" class="btn" value="送出">
                             </div>
                         </div>

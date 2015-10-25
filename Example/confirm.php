@@ -1,13 +1,12 @@
 <?php
-require_once("LinePayAPI.php");
+require_once("../LinePay.php");
 session_start();
 ?>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>LinePay API Test</title>
-        <link rel="stylesheet" href="./kule-lazy-full.min.css" />
-        <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+        <link rel="stylesheet" href="./kule-lazy-full.3.0.1007beta.min.css" />
     </head>
     <body>
         <header>
@@ -32,9 +31,9 @@ session_start();
                             ];
 
                             try {
-                                $LinePayAPI = new Chinwei6\LinePayAPI($apiEndpoint, $channelId, $channelSecret);
+                                $LinePay = new Chinwei6\LinePay($apiEndpoint, $channelId, $channelSecret);
 
-                                $result = $LinePayAPI->confirm($_GET['transactionId'], $params);
+                                $result = $LinePay->confirm($_GET['transactionId'], $params);
                                 echo '<pre class="code">';
                                 echo json_encode($result, JSON_PRETTY_PRINT);
                                 echo '</pre>';

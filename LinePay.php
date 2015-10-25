@@ -1,7 +1,6 @@
 <?php
-
 namespace Chinwei6 {
-    class LinePayAPI {
+    class LinePay {
         protected $apiEndpoint;
         protected $headers;
 
@@ -14,12 +13,12 @@ namespace Chinwei6 {
                 $this->apiEndpoint = $apiEndpoint;
             }
 
-            $headers = new LinePayAPI\Headers($channelId, $channelSecret);
+            $headers = new LinePay\Headers($channelId, $channelSecret);
             $this->headers = $headers->getHeaders();
         }
 
         public function reserve($params = []) {
-            $reserveParams = new LinePayAPI\ReserveParams($params);
+            $reserveParams = new LinePay\ReserveParams($params);
 
             return $this->postRequest($this->apiEndpoint . 'request', $reserveParams->getParams());
         }
@@ -28,7 +27,7 @@ namespace Chinwei6 {
             if(is_null($transactionId))
                 throw new \Exception('transactionId is required');
 
-            $confirmParams = new LinePayAPI\ConfirmParams($params);
+            $confirmParams = new LinePay\ConfirmParams($params);
 
             return $this->postRequest($this->apiEndpoint . $transactionId . '/confirm', $confirmParams->getParams());
         }
@@ -61,7 +60,7 @@ namespace Chinwei6 {
     }
 }
 
-namespace Chinwei6\LinePayAPI {
+namespace Chinwei6\LinePay {
     class Headers {
         protected $channelId;
         protected $channelSecret;

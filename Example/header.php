@@ -2,7 +2,7 @@
     <div class="navbar">
         <div class="navbar-header">
             <a class="navbar-toggle"></a>
-            <a class="navbar-brand" href="index.php">LinePay API 測試工具 Beta</a>
+            <a class="navbar-brand" href="index.php">LinePay API - PHP 測試工具 Beta</a>
         </div>
         <div class="navbar-content">
             <ul class="navbar-nav right">
