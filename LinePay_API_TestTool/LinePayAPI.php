@@ -86,76 +86,61 @@ namespace Chinwei6\LinePayAPI {
         } 
     }
 
-    class ReserveParams {
-        protected $params = [
-            // Required    
-            'currency' => '',
-            'confirmUrl' => '',
-            'orderId' => '',
-            'productName' => '',
-            'productImageUrl' => '',
-            'amount' => '',
+    abstract class Params {
+        protected $requiredFields = [];
+        protected $optionalFields = [];
+        protected $params = [];
 
-            // Optional
-            'confirmUrlType' => '',
-            'checkConfirmUrlBrow' => '',
-            'capture' => '',
-        ];
-    
+        protected function valitate($params) {
+            foreach($this->requiredFields as $field)
+            {
+                if(!isset($params[$field])) {
+                    throw new \Exception($field . ' is required in payment reserve');
+                }
+                else {
+                    $this->params[$field] = $params[$field];
+                }
+            }
+
+            foreach($this->optionalFields as $field)
+            {
+                if(isset($params[$field])) {
+                    $this->params[$field] = $params[$field];
+                }
+            }
+        }
+
         public function __construct($params)
         {
-            if( !isset($params['currency']) ) {
-                throw new \Exception('currency is required in payment reserve');
-            }
-            else if( !isset($params['confirmUrl']) ) {
-                throw new \Exception('confirmUrl is required in payment reserve');
-            }
-            else if( !isset($params['orderId']) ) {
-                throw new \Exception('orderId is required in payment reserve');
-            }
-            else if( !isset($params['productName']) ) {
-                throw new \Exception('productName is required in payment reserve');
-            }
-            else if( !isset($params['productImageUrl']) ) {
-                throw new \Exception('productImageUrl is required in payment reserve');
-            }
-            else if( !isset($params['amount']) ) {
-                throw new \Exception('amount is required in payment reserve');
-            }
-            else {
-                $this->params = $params;
-            }
+            $this->valitate($params);
         }   
 
         public function getParams() {
-            // 應該要確保所有欄位沒有多也沒有少！
             return $this->params;
-        } 
+        }       
     }
 
-    class ConfirmParams {
-        protected $params = [
-            // Required    
+    class ReserveParams extends Params {
+        protected $requiredFields = [
+            'currency',
+            'confirmUrl',
+            'orderId',
+            'productName',
+            'productImageUrl',
+            'amount',
+        ];
+
+        protected $optionalFields = [
+            'confirmUrlType',
+            'checkConfirmUrlBrow',
+            'capture',
+        ]; 
+    }
+
+    class ConfirmParams extends Params {
+        protected $requiredFields = [
             'amount' => '',
             'currency' => '',
         ];
-
-        public function __construct($params)
-        {
-            if( !isset($params['amount']) ) {
-                throw new \Exception('amount is required in payment confirm');
-            }
-            else if( !isset($params['currency']) ) {
-                throw new \Exception('currency is required in payment confirm');
-            }
-            else {
-                $this->params = $params;
-            }
-        }   
-
-        public function getParams() {
-            // 應該要確保所有欄位沒有多也沒有少！
-            return $this->params;
-        } 
     }
 }
