@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>LinePay API - PHP Test Tool</title>
+        <title>LINE Pay API - PHP Test Tool</title>
         <link rel="stylesheet" href="./kule-lazy-full.3.0.1007beta.min.css" />
     </head>
     <body>
@@ -16,7 +16,7 @@
                     </div>
                     <div class="panel-box">
                         <div class="ctrl-grp columns-12">
-                            <label class="ctrl-label col-3">Line Pay API Server</label>
+                            <label class="ctrl-label col-3">LINE Pay API Server</label>
                             <div class="ctrls col-9">
                                 <input type="text" class="ctrl-input" name="apiEndpoint" value="https://sandbox-api-pay.line.me/v2/payments/">
                             </div>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="ctrl-grp columns-12">
                             <div class="ctrls col-9 col-offset-3">
-                                <input type="submit" class="btn" value="送出">
+                                使用 <input type="image" src="./linepay_logo_119x39.png"> 支付
                             </div>
                         </div>
                     </div>
