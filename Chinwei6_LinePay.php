@@ -1,4 +1,8 @@
 <?php
+/**
+ * Chinwei6\LinePay v20151028 - PHP Libary for LINE Pay API
+ * by 6chinwei
+ */
 namespace Chinwei6 {
     class LinePay {
         protected $apiEndpoint;
@@ -191,8 +195,8 @@ namespace Chinwei6\LinePay {
     class ConfirmParams extends Params {
         // 必要欄位
         protected $requiredFields = [
-            'amount' => '',
-            'currency' => '',
+            'amount',
+            'currency',
         ];
     }
 }
