@@ -33,7 +33,7 @@
 * PHP 版本: v5.5.9
 * LINE Aay API 版本: v2
 * [Sandbox 測試工具原始碼（PHP 網頁介面）](../Example)
-* [PHP Libary (Chinwei6/LinePay) for LINE Pay API](../LinePay.php) (使用 php_curl 實作)
+* [PHP Libary (Chinwei6/LinePay) for LINE Pay API](../Chinwei6_LinePay.php) (使用 php_curl 實作)
 
 ### LINE Pay 支付功能與頁面轉換流程圖
 依照上面的 LINE Pay 付款流程，我們可以把購物網站的 LINE Pay 支付功能流程設計為：  
