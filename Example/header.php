@@ -6,7 +6,13 @@
         </div>
         <div class="navbar-content">
             <ul class="navbar-nav right">
-                <li class="navbar-nav-item">
+                <li class="navbar-nav-item <?php echo isActive('index.php').' '.isActive('reserve.php').' '.isActive('confirm.php');  ?>">
+                    <a class="navbar-nav-link">支付測試</a>
+                </li>
+                <li class="navbar-nav-item <?php echo isActive('record.php'); ?>">
+                    <a class="navbar-nav-link">付款記錄查詢</a>
+                </li>
+                <li class="navbar-nav-item <?php echo isActive('about.php'); ?>">
                     <a class="navbar-nav-link">關於</a>
                 </li>
             </ul>

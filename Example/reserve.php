@@ -5,8 +5,14 @@ session_start();
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>LinePay API Test</title>
-        <link rel="stylesheet" href="./kule-lazy-full.3.0.1007beta.min.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>LinePay API Test - Reserve</title>
+        <link rel="stylesheet" href="kule-lazy-full.3.0.1007beta.min.css" />
+        <style type="text/css">
+            body {
+                min-width: 360px;
+            }   
+        </style>
     </head>
     <body>
         <header>
