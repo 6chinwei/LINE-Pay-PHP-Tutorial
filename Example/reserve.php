@@ -1,5 +1,5 @@
 <?php
-require_once("../LinePay.php");
+require_once("../Chinwei6_LinePay.php");
 session_start();
 ?>
 <html>
