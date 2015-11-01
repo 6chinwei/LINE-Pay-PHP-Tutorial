@@ -18,6 +18,9 @@ session_start();
         <header>
             <?php include('./header.php'); ?>
         </header>
+
+        <?php include('./payment_steps.php'); ?>
+
         <div class="container">
             <div class="panel">
                 <div class="panel-header">
@@ -50,10 +53,12 @@ session_start();
                                 echo '</pre>';
                             }
 
-                            session_destroy();
+                            unset($_SESSION['cache']);
                         }
                         else {
-                            echo "No Data";
+                            echo '<pre class="code">';
+                            echo "No Params";
+                            echo '</pre>';
                         }
                     ?>
                 </div>

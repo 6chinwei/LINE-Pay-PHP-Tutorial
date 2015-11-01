@@ -14,6 +14,9 @@
         <header>
             <?php include('./header.php'); ?>
         </header>
+
+        <?php include('./payment_steps.php'); ?>
+        
         <div class="container">
             <form class="form-horizontal" id="reserveForm" method="POST" action="reserve.php">
                 <div class="panel">
