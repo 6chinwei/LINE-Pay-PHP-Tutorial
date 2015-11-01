@@ -54,6 +54,15 @@ namespace Chinwei6 {
         }
 
         /**
+         * 發送 Payments 請求
+         */
+        public function payments($params = []) {
+            $paymentsParams = new LinePay\PaymentsParams($params);
+
+            return $this->getRequest($this->apiEndpoint, $paymentsParams->getParams());
+        }
+
+        /**
          * 使用 CURL 發送 POST 請求
          * @param  [String] $url        POST 請求的 URL
          * @param  [Array]  $postFields POST 請求的參數
@@ -64,6 +73,27 @@ namespace Chinwei6 {
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_POST, true); 
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postFields));   
+            curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
+
+            $response = json_decode(curl_exec($ch), true);
+
+            if (curl_errno($ch)) {
+                throw new \Exception(curl_error($ch));
+            } else {
+                return $response;
+            }
+
+            curl_close($ch);
+        }
+
+        /**
+         * 使用 CURL 發送 GET 請求
+         */
+        protected function getRequest($url = null, $urlParams = []) {
+            $ch = curl_init();     
+            curl_setopt($ch, CURLOPT_URL, $url . '?' . http_build_query($urlParams));
             curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
             curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
@@ -198,5 +228,24 @@ namespace Chinwei6\LinePay {
             'amount',
             'currency',
         ];
+    }
+
+    /**
+     * ConfirmParams Class
+     * 發送 Confirm 請求的參數
+     */
+    class PaymentsParams extends Params {
+        // 非必要欄位
+        protected $optionalFields = [
+            'orderId',
+            'transactionId'
+        ]; 
+
+        protected function valitate($params) {
+            parent::valitate($params);
+
+            if( !isset($this->params['orderId']) && !isset($this->params['transactionId']) )
+                throw new \Exception('Parameter "orderId" or "transactionId" is required.');
+        }
     }
 }
