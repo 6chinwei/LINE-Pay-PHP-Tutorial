@@ -18,6 +18,9 @@ session_start();
         <header>
             <?php include('./header.php'); ?>
         </header>
+
+        <?php include('./payment_steps.php'); ?>
+
         <div class="container">
             <div class="panel">
                 <div class="panel-header">
@@ -44,6 +47,8 @@ session_start();
 
                             try {
                                 $LinePay = new Chinwei6\LinePay($apiEndpoint, $channelId, $channelSecret);
+                                
+                                // Save params in the _SESSION
                                 $_SESSION['cache'] = [
                                     "apiEndpoint"   => $_POST['apiEndpoint'],
                                     "channelId"     => $_POST['channelId'],

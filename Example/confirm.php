@@ -18,6 +18,9 @@ session_start();
         <header>
             <?php include('./header.php'); ?>
         </header>
+
+        <?php include('./payment_steps.php'); ?>
+
         <div class="container">
             <div class="panel">
                 <div class="panel-header">
