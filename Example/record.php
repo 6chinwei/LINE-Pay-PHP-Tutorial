@@ -28,7 +28,7 @@
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">LINE Pay API Server</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="apiEndpoint" value="" readonly required>
+                                <input type="text" class="ctrl-input" name="apiEndpoint" value="https://sandbox-api-pay.line.me/v2/payments/" required>
                             </div>
                         </div>
                         <div class="ctrl-grp columns-12">
@@ -94,7 +94,7 @@
 
                             try {
                                 $LinePay = new Chinwei6\LinePay($apiEndpoint, $channelId, $channelSecret);
-                                $result = $LinePay->payments($params);
+                                $result = $LinePay->checkPayment($params);
                                 echo '<pre class="code">';
                                 echo json_encode($result, JSON_PRETTY_PRINT);
                                 echo '</pre>';

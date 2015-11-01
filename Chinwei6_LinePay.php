@@ -1,6 +1,6 @@
 <?php
 /**
- * Chinwei6\LinePay v20151028 - PHP Libary for LINE Pay API
+ * Chinwei6\LinePay v20151101 BETA - PHP Libary for LINE Pay API
  * by 6chinwei
  */
 namespace Chinwei6 {
@@ -54,12 +54,12 @@ namespace Chinwei6 {
         }
 
         /**
-         * 發送 Payments 請求
+         * 發送 Check payment 請求
          */
-        public function payments($params = []) {
-            $paymentsParams = new LinePay\PaymentsParams($params);
+        public function checkPayment($params = []) {
+            $checkPaymentParams = new LinePay\CheckPaymentParams($params);
 
-            return $this->getRequest($this->apiEndpoint, $paymentsParams->getParams());
+            return $this->getRequest($this->apiEndpoint, $checkPaymentParams->getParams());
         }
 
         /**
@@ -231,10 +231,10 @@ namespace Chinwei6\LinePay {
     }
 
     /**
-     * ConfirmParams Class
-     * 發送 Confirm 請求的參數
+     * PaymentsParams Class
+     * 發送  請求的參數
      */
-    class PaymentsParams extends Params {
+    class CheckPaymentParams extends Params {
         // 非必要欄位
         protected $optionalFields = [
             'orderId',
