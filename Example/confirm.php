@@ -50,10 +50,12 @@ session_start();
                                 echo '</pre>';
                             }
 
-                            session_destroy();
+                            unset($_SESSION['cache']);
                         }
                         else {
-                            echo "No Data";
+                            echo '<pre class="code">';
+                            echo "No Params";
+                            echo '</pre>';
                         }
                     ?>
                 </div>

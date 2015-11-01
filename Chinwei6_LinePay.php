@@ -136,7 +136,7 @@ namespace Chinwei6\LinePay {
             {
                 // 檢查必要參數
                 if(!isset($params[$field])) {
-                    throw new \Exception($field . ' is required.');
+                    throw new \Exception('Parameter "' . $field . '"" is required.');
                 }
                 else {
                     $this->params[$field] = $params[$field];
