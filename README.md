@@ -10,7 +10,7 @@
   **必須設定伺服器白名單**  
       要發送請求給 LINE Pay 伺服器的伺服器（例如你的開發環境，或佈署購物網站的伺服器），其 IP 位置都必須記錄在商家帳戶的伺服器白名單內，否則發出的請求會被 LINE Pay 拒絕。特別注意 Sandbox 和正式環境須分開設定。
 
-### PHP Libary for LINE Pay API
+### PHP Library for LINE Pay API
 [Chinwei6/LinePay v20151101 BETA](Chinwei6_LinePay.php) (使用 php_curl 實作)
 
 ### 教學文章
