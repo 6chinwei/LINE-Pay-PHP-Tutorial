@@ -15,9 +15,11 @@
 
 #### 角色
 在一次的付款的流程中，可以想像有三種角色參與其中：
-* 商家的購物網站
+* 商家的購物網站（包含前端頁面與後端伺服器）
 * 網站使用者（買家）
 * LINE Pay 伺服器  
+
+> 商家的購物網站除了要有前端頁面提供給使用者進行付款之外，也需要有後端伺服器來發送 API 請求給 LINE Pay 伺服器（不可從網站使用者的瀏覽器發送 LINE Pay API 請求） 
 
 #### 流程
 1. 使用者在購物網站上選擇使用 LINE Pay 付款
@@ -32,8 +34,9 @@
 ## 付款功能開發範例
 * PHP 版本: v5.5.9
 * LINE Pay API 版本: v2
+* 使用 LINE Pay API 的[事前準備](../README.md)
 * [Sandbox 測試工具原始碼（PHP 網頁介面）](../Example)
-* [PHP Libary (Chinwei6/LinePay) for LINE Pay API](../Chinwei6_LinePay.php) (使用 php_curl 實作)
+* [PHP Library (Chinwei6/LinePay) for LINE Pay API](../Chinwei6_LinePay.php) (使用 php_curl 實作)
 
 #### 購物網站的付款流程與頁面
 依照上面的 LINE Pay 付款流程，我們可以把購物網站的 LINE Pay 付款功能流程設計為：  
@@ -81,7 +84,7 @@
   <?php 
   /* reserve.php */
 
-  // 引用 Chinwei6/LinePay PHP Libary
+  // 引用 Chinwei6/LinePay PHP Library
   require_once("Chinwei6_LinePay.php");
 
   $apiEndpoint   = "...";  // API 位置
@@ -163,7 +166,7 @@
   <?php 
   /* confirm.php */
 
-  // 引用 Chinwei6/LinePay PHP Libary
+  // 引用 Chinwei6/LinePay PHP Library
   require_once("Chinwei6_LinePay.php");
 
   $apiEndpoint   = "...";  // API 位置
