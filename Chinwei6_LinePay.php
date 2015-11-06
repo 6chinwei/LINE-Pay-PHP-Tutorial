@@ -118,7 +118,6 @@ namespace Chinwei6\LinePay {
      */
     abstract class Params {
         protected $requiredFields = [];
-        protected $optionalFields = [];
         protected $params = [];
 
         /**
@@ -131,19 +130,11 @@ namespace Chinwei6\LinePay {
             {
                 // 檢查必要參數
                 if(!isset($params[$field])) {
-                    throw new \Exception('Parameter "' . $field . '"" is required.');
-                }
-                else {
-                    $this->params[$field] = $params[$field];
+                    throw new \Exception('Parameter "' . $field . '" is required.');
                 }
             }
 
-            foreach($this->optionalFields as $field)
-            {
-                if(isset($params[$field])) {
-                    $this->params[$field] = $params[$field];
-                }
-            }
+            $this->params = $params;
         }
 
         public function __construct($params)
@@ -162,7 +153,7 @@ namespace Chinwei6\LinePay {
 
     /**
      * ReserveParams Class
-     * 發送 Reserve 請求的參數
+     * Reserve 請求的參數
      */
     class ReserveParams extends Params {
         // 必要欄位
@@ -174,18 +165,11 @@ namespace Chinwei6\LinePay {
             'productImageUrl',
             'amount',
         ];
-
-        // 非必要欄位
-        protected $optionalFields = [
-            'confirmUrlType',
-            'checkConfirmUrlBrow',
-            'capture',
-        ]; 
     }
 
     /**
      * ConfirmParams Class
-     * 發送 Confirm 請求的參數
+     * Confirm 請求的參數
      */
     class ConfirmParams extends Params {
         // 必要欄位
@@ -196,15 +180,11 @@ namespace Chinwei6\LinePay {
     }
 
     /**
-     * PaymentsParams Class
-     * 發送  請求的參數
+     * CheckPaymentsParams Class
+     * Check Payment 請求的參數
      */
     class CheckPaymentParams extends Params {
-        // 非必要欄位
-        protected $optionalFields = [
-            'orderId',
-            'transactionId'
-        ]; 
+        protected $requiredFields = []; 
 
         protected function valitate($params) {
             parent::valitate($params);
