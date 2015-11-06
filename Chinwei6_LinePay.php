@@ -67,6 +67,20 @@ namespace Chinwei6 {
                                   $checkPaymentParams->getParams());
         }
 
+        /**
+         * 發送 Refund 請求
+         */
+        public function refund($transactionId = null, $params = []) {
+            if(is_null($transactionId))
+                throw new \Exception('transactionId is required.');
+
+            $refundParams = new LinePay\RefundParams($params);
+
+            return $this->request('POST', 
+                                  $transactionId . '/refund', 
+                                  $refundParams->getParams());
+        }
+
         protected function request($method = 'GET', $relativeUrl = null, $params = []) {
             if(is_null($relativeUrl)) {
                 throw new \Exception('API endpoint is required.');
@@ -192,5 +206,13 @@ namespace Chinwei6\LinePay {
             if( !isset($this->params['orderId']) && !isset($this->params['transactionId']) )
                 throw new \Exception('Parameter "orderId" or "transactionId" is required.');
         }
+    }
+
+    /**
+     * RefundParams Class
+     * Refund 請求的參數
+     */
+    class RefundParams extends Params {
+        protected $requiredFields = []; 
     }
 }
