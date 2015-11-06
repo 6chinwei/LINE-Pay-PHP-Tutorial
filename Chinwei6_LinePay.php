@@ -1,6 +1,6 @@
 <?php
 /**
- * Chinwei6\LinePay v20151101 BETA - PHP Libary for LINE Pay API
+ * Chinwei6\LinePay v20151106 BETA - PHP Library for LINE Pay API
  * by 6chinwei
  */
 namespace Chinwei6 {
@@ -17,7 +17,7 @@ namespace Chinwei6 {
         public function __construct($apiEndpoint = null, $channelId = null, $channelSecret = null)
         {
             if(is_null($apiEndpoint)) {
-                throw new \Exception('API endpoint is required');
+                throw new \Exception('API endpoint is required.');
             }
             else {
                 $this->apiEndpoint = $apiEndpoint;
@@ -47,7 +47,7 @@ namespace Chinwei6 {
          */
         public function confirm($transactionId = null, $params = []) {
             if(is_null($transactionId))
-                throw new \Exception('transactionId is required');
+                throw new \Exception('transactionId is required.');
 
             $confirmParams = new LinePay\ConfirmParams($params);
 
