@@ -19,7 +19,7 @@ session_start();
             <?php include('./blocks/header.php'); ?>
         </header>
 
-        <?php include('./payment_steps.php'); ?>
+        <?php include('./blocks/payment_steps.php'); ?>
 
         <div class="container">
             <div class="panel">
