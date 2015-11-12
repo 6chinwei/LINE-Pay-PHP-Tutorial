@@ -1,6 +1,6 @@
 <?php
 /**
- * Chinwei6\LinePay v20151101 BETA - PHP Libary for LINE Pay API
+ * Chinwei6\LinePay v20151112 BETA - PHP Library for LINE Pay API
  * by 6chinwei
  */
 namespace Chinwei6 {
@@ -10,185 +10,176 @@ namespace Chinwei6 {
 
         /**
          * Chinwei6\LinePay Constructer
-         * @param [String] $apiEndpoint   API 位置
-         * @param [String] $channelId     通路ID
-         * @param [String] $channelSecret 通路密鑰
+         * @param [String] $apiEndpoint
+         * @param [String] $channelId   
+         * @param [String] $channelSecret 
          */
         public function __construct($apiEndpoint = null, $channelId = null, $channelSecret = null)
         {
             if(is_null($apiEndpoint)) {
-                throw new \Exception('API endpoint is required');
+                throw new \Exception('API endpoint is required.');
             }
             else {
                 $this->apiEndpoint = $apiEndpoint;
             }
 
-            $headers = new LinePay\Headers($channelId, $channelSecret);
-            $this->headers = $headers->getHeaders();
+            // Generate header content by channelId & channelSecret
+            $this->headers = self::getRequestHeader($channelId, $channelSecret);
         }
 
         /**
-         * 發送 Reserve 請求
-         * @param  [Array]  $params 訂單參數
-         * @return [Array]          LINE Pay 伺服器回傳的結果(JSON)
+         * Reserve API
+         * @param  [Array]  $params  Post parameters
+         * @return [Array]           Result from LINE Pay server (JSON)
          */
         public function reserve($params = []) {
             $reserveParams = new LinePay\ReserveParams($params);
 
-            return $this->postRequest($this->apiEndpoint . 'request', $reserveParams->getParams());
+            return $this->request('POST', 
+                                  'request', 
+                                  $reserveParams->getParams());
         }
 
         /**
-         * 發送 Confirm 請求
-         * @param  [String] $transactionId 交易編號
-         * @param  [Array]  $params        參數，即金額與幣別
-         * @return [Array]                 LINE Pay 伺服器回傳的結果(JSON)
+         * Confirm API
+         * @param  [String] $transactionId 
+         * @param  [Array]  $params         Post parameters
+         * @return [Array]                  Result from LINE Pay server (JSON)
          */
         public function confirm($transactionId = null, $params = []) {
             if(is_null($transactionId))
-                throw new \Exception('transactionId is required');
+                throw new \Exception('transactionId is required.');
+            else if(!is_string($transactionId))
+                throw new \Exception('transactionId must be a string.');
 
             $confirmParams = new LinePay\ConfirmParams($params);
 
-            return $this->postRequest($this->apiEndpoint . $transactionId . '/confirm', $confirmParams->getParams());
+            return $this->request('POST', 
+                                  $transactionId . '/confirm', 
+                                  $confirmParams->getParams());
         }
 
         /**
-         * 發送 Check payment 請求
+         * Check payment API
+         * @param  [Array]  $params  GET parameters
+         * @return [Array]           Result from LINE Pay server (JSON)
          */
         public function checkPayment($params = []) {
             $checkPaymentParams = new LinePay\CheckPaymentParams($params);
 
-            return $this->getRequest($this->apiEndpoint, $checkPaymentParams->getParams());
+            return $this->request('GET', 
+                                  '', 
+                                  $checkPaymentParams->getParams());
         }
 
         /**
-         * 使用 CURL 發送 POST 請求
-         * @param  [String] $url        POST 請求的 URL
-         * @param  [Array]  $postFields POST 請求的參數
-         * @return [Array]              收到的回應，回傳 Associative Array 格式
+         * Refund API
+         * @param  [String] $transactionId 
+         * @param  [Array]  $params         Post parameters
+         * @return [Array]                  Result from LINE Pay server (JSON)
          */
-        protected function postRequest($url = null, $postFields = []) {
-            $ch = curl_init();     
-            curl_setopt($ch, CURLOPT_URL, $url);
-            curl_setopt($ch, CURLOPT_POST, true); 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postFields));   
-            curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
+        public function refund($transactionId = null, $params = []) {
+            if(is_null($transactionId))
+                throw new \Exception('transactionId is required.');
+            else if(!is_string($transactionId))
+                throw new \Exception('transactionId must be a string.');
 
-            $response = json_decode(curl_exec($ch), true);
+            $refundParams = new LinePay\RefundParams($params);
 
-            if (curl_errno($ch)) {
-                throw new \Exception(curl_error($ch));
-            } else {
-                return $response;
-            }
-
-            curl_close($ch);
+            return $this->request('POST', 
+                                  $transactionId . '/refund', 
+                                  $refundParams->getParams());
         }
 
         /**
-         * 使用 CURL 發送 GET 請求
+         * Private function: send request by php_curl
+         * @param  [String] $method      Request method: 'POST', 'GET'
+         * @param  [String] $relativeUrl Target API url path
+         * @param  [Array]  $params      Request parameters
+         * @return [Array]               Result by the request
          */
-        protected function getRequest($url = null, $urlParams = []) {
-            $ch = curl_init();     
-            curl_setopt($ch, CURLOPT_URL, $url . '?' . http_build_query($urlParams));
-            curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
+        protected function request($method = 'GET', $relativeUrl = null, $params = []) {
+            if(is_null($relativeUrl)) {
+                throw new \Exception('API endpoint is required.');
+            }
+
+            $ch = curl_init();
+
+            if ($method === 'GET') {
+                $relativeUrl .= '?'.http_build_query($params);
+            }
+            else if ($method === 'POST') {
+                curl_setopt($ch, CURLOPT_POST, true); 
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+            }
+
+            curl_setopt($ch, CURLOPT_URL, $this->apiEndpoint . $relativeUrl);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  
             curl_setopt($ch, CURLOPT_HTTPHEADER, $this->headers);
-
-            $response = json_decode(curl_exec($ch), true);
+            curl_setopt($ch, CURLOPT_SSLVERSION, 'CURL_SSLVERSION_TLSv1');
 
             if (curl_errno($ch)) {
                 throw new \Exception(curl_error($ch));
-            } else {
-                return $response;
             }
 
+            $response = json_decode(curl_exec($ch), true);
+
             curl_close($ch);
+
+            return $response;
+        }
+
+        /**
+         * Static function: Generate header content by channelId & channelSecret
+         * @param  [String] $channelId     
+         * @param  [String] $channelSecret 
+         * @return [Array]                 Header content for CURLOPT_HTTPHEADER
+         */
+        protected static function getRequestHeader($channelId = null, $channelSecret = null) {
+            if( is_null($channelId) || is_null($channelSecret)) {
+                throw new \Exception('Header info are required.');
+            }
+            
+            return [
+                'Content-Type:application/json; charset=UTF-8',
+                'X-LINE-ChannelId:' . $channelId,
+                'X-LINE-ChannelSecret:' . $channelSecret,
+            ];   
         }
     }
 }
 
 namespace Chinwei6\LinePay {
     /**
-     * Headers Class
-     */
-    class Headers {
-        protected $channelId;
-        protected $channelSecret;
-
-        /**
-         * 建立 Chinwei6\LinePay\Header 物件，並檢查 channelId 和 channelSecret 是否正確
-         * @param [type] $channelId     [description]
-         * @param [type] $channelSecret [description]
-         */
-        public function __construct($channelId = null, $channelSecret = null)
-        {
-            if( is_null($channelId) || is_null($channelSecret)) {
-                throw new \Exception('Header info are required');
-            }
-            else {
-                $this->channelId     = $channelId;
-                $this->channelSecret = $channelSecret;
-            }
-        }   
-
-        /**
-         * 回傳 Header 內容，包含 channelId 和 channelSecret
-         * @return [Array] Header 內容，提供給 CURLOPT_HTTPHEADER 設定 header
-         */
-        public function getHeaders() {
-            return [
-                'Content-Type:application/json; charset=UTF-8',
-                'X-LINE-ChannelId:' . $this->channelId,
-                'X-LINE-ChannelSecret:' . $this->channelSecret,
-            ];
-        } 
-    }
-
-    /**
-     * Params Class (抽象類別)
+     * Params Class (Abstract class)
      */
     abstract class Params {
         protected $requiredFields = [];
-        protected $optionalFields = [];
         protected $params = [];
 
         /**
-         * 檢查參數欄位名稱是否符合 + 檢查必要參數是否存在
-         * @param  [Array] $params 參數
-         * @return None         
+         * Validate the required field of the parameter
+         * @param  [Array] $params  
          */
-        protected function valitate($params) {
+        protected function validate($params) {
             foreach($this->requiredFields as $field)
             {
-                // 檢查必要參數
-                if(!isset($params[$field])) {
-                    throw new \Exception('Parameter "' . $field . '"" is required.');
-                }
-                else {
-                    $this->params[$field] = $params[$field];
+                if(!isset($params[$field]) || empty($params[$field])) {
+                    throw new \Exception('Parameter "' . $field . '" is required.');
                 }
             }
 
-            foreach($this->optionalFields as $field)
-            {
-                if(isset($params[$field])) {
-                    $this->params[$field] = $params[$field];
-                }
-            }
+            $this->params = $params;
         }
 
         public function __construct($params)
         {
-            $this->valitate($params);
+            $this->validate($params);
         }   
 
         /**
-         * 回傳檢查過的參數陣列
-         * @return [Array] 參數陣列
+         * Return a validated parameter array 
+         * @return [Array] 
          */
         public function getParams() {
             return $this->params;
@@ -197,7 +188,6 @@ namespace Chinwei6\LinePay {
 
     /**
      * ReserveParams Class
-     * 發送 Reserve 請求的參數
      */
     class ReserveParams extends Params {
         // 必要欄位
@@ -209,18 +199,10 @@ namespace Chinwei6\LinePay {
             'productImageUrl',
             'amount',
         ];
-
-        // 非必要欄位
-        protected $optionalFields = [
-            'confirmUrlType',
-            'checkConfirmUrlBrow',
-            'capture',
-        ]; 
     }
 
     /**
      * ConfirmParams Class
-     * 發送 Confirm 請求的參數
      */
     class ConfirmParams extends Params {
         // 必要欄位
@@ -231,21 +213,23 @@ namespace Chinwei6\LinePay {
     }
 
     /**
-     * PaymentsParams Class
-     * 發送  請求的參數
+     * CheckPaymentsParams Class
      */
     class CheckPaymentParams extends Params {
-        // 非必要欄位
-        protected $optionalFields = [
-            'orderId',
-            'transactionId'
-        ]; 
+        protected $requiredFields = []; 
 
-        protected function valitate($params) {
-            parent::valitate($params);
+        protected function validate($params) {
+            parent::validate($params);
 
-            if( !isset($this->params['orderId']) && !isset($this->params['transactionId']) )
+            if( empty($this->params['orderId']) && empty($this->params['transactionId']) )
                 throw new \Exception('Parameter "orderId" or "transactionId" is required.');
         }
+    }
+
+    /**
+     * RefundParams Class
+     */
+    class RefundParams extends Params {
+        protected $requiredFields = []; 
     }
 }
