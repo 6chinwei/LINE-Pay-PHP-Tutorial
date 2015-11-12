@@ -1,6 +1,6 @@
 <?php
 /**
- * Chinwei6\LinePay v20151106 BETA - PHP Library for LINE Pay API
+ * Chinwei6\LinePay v20151112 BETA - PHP Library for LINE Pay API
  * by 6chinwei
  */
 namespace Chinwei6 {
@@ -10,9 +10,9 @@ namespace Chinwei6 {
 
         /**
          * Chinwei6\LinePay Constructer
-         * @param [String] $apiEndpoint   API 位置
-         * @param [String] $channelId     通路ID
-         * @param [String] $channelSecret 通路密鑰
+         * @param [String] $apiEndpoint
+         * @param [String] $channelId   
+         * @param [String] $channelSecret 
          */
         public function __construct($apiEndpoint = null, $channelId = null, $channelSecret = null)
         {
@@ -23,13 +23,14 @@ namespace Chinwei6 {
                 $this->apiEndpoint = $apiEndpoint;
             }
 
+            // Generate header content by channelId & channelSecret
             $this->headers = self::getRequestHeader($channelId, $channelSecret);
         }
 
         /**
-         * 發送 Reserve 請求
-         * @param  [Array]  $params 訂單參數
-         * @return [Array]          LINE Pay 伺服器回傳的結果(JSON)
+         * Reserve API
+         * @param  [Array]  $params  Post parameters
+         * @return [Array]           Result from LINE Pay server (JSON)
          */
         public function reserve($params = []) {
             $reserveParams = new LinePay\ReserveParams($params);
@@ -40,14 +41,16 @@ namespace Chinwei6 {
         }
 
         /**
-         * 發送 Confirm 請求
-         * @param  [String] $transactionId 交易編號
-         * @param  [Array]  $params        參數，即金額與幣別
-         * @return [Array]                 LINE Pay 伺服器回傳的結果(JSON)
+         * Confirm API
+         * @param  [String] $transactionId 
+         * @param  [Array]  $params         Post parameters
+         * @return [Array]                  Result from LINE Pay server (JSON)
          */
         public function confirm($transactionId = null, $params = []) {
             if(is_null($transactionId))
                 throw new \Exception('transactionId is required.');
+            else if(!is_string($transactionId))
+                throw new \Exception('transactionId must be a string.');
 
             $confirmParams = new LinePay\ConfirmParams($params);
 
@@ -57,7 +60,9 @@ namespace Chinwei6 {
         }
 
         /**
-         * 發送 Check payment 請求
+         * Check payment API
+         * @param  [Array]  $params  GET parameters
+         * @return [Array]           Result from LINE Pay server (JSON)
          */
         public function checkPayment($params = []) {
             $checkPaymentParams = new LinePay\CheckPaymentParams($params);
@@ -68,11 +73,16 @@ namespace Chinwei6 {
         }
 
         /**
-         * 發送 Refund 請求
+         * Refund API
+         * @param  [String] $transactionId 
+         * @param  [Array]  $params         Post parameters
+         * @return [Array]                  Result from LINE Pay server (JSON)
          */
         public function refund($transactionId = null, $params = []) {
             if(is_null($transactionId))
                 throw new \Exception('transactionId is required.');
+            else if(!is_string($transactionId))
+                throw new \Exception('transactionId must be a string.');
 
             $refundParams = new LinePay\RefundParams($params);
 
@@ -81,6 +91,13 @@ namespace Chinwei6 {
                                   $refundParams->getParams());
         }
 
+        /**
+         * Private function: send request by php_curl
+         * @param  [String] $method      Request method: 'POST', 'GET'
+         * @param  [String] $relativeUrl Target API url path
+         * @param  [Array]  $params      Request parameters
+         * @return [Array]               Result by the request
+         */
         protected function request($method = 'GET', $relativeUrl = null, $params = []) {
             if(is_null($relativeUrl)) {
                 throw new \Exception('API endpoint is required.');
@@ -112,6 +129,12 @@ namespace Chinwei6 {
             return $response;
         }
 
+        /**
+         * Static function: Generate header content by channelId & channelSecret
+         * @param  [String] $channelId     
+         * @param  [String] $channelSecret 
+         * @return [Array]                 Header content for CURLOPT_HTTPHEADER
+         */
         protected static function getRequestHeader($channelId = null, $channelSecret = null) {
             if( is_null($channelId) || is_null($channelSecret)) {
                 throw new \Exception('Header info are required.');
@@ -128,22 +151,20 @@ namespace Chinwei6 {
 
 namespace Chinwei6\LinePay {
     /**
-     * Params Class (抽象類別)
+     * Params Class (Abstract class)
      */
     abstract class Params {
         protected $requiredFields = [];
         protected $params = [];
 
         /**
-         * 檢查參數欄位名稱是否符合 + 檢查必要參數是否存在
-         * @param  [Array] $params 參數
-         * @return None         
+         * Validate the required field of the parameter
+         * @param  [Array] $params  
          */
-        protected function valitate($params) {
+        protected function validate($params) {
             foreach($this->requiredFields as $field)
             {
-                // 檢查必要參數
-                if(!isset($params[$field])) {
+                if(!isset($params[$field]) || empty($params[$field])) {
                     throw new \Exception('Parameter "' . $field . '" is required.');
                 }
             }
@@ -153,12 +174,12 @@ namespace Chinwei6\LinePay {
 
         public function __construct($params)
         {
-            $this->valitate($params);
+            $this->validate($params);
         }   
 
         /**
-         * 回傳檢查過的參數陣列
-         * @return [Array] 參數陣列
+         * Return a validated parameter array 
+         * @return [Array] 
          */
         public function getParams() {
             return $this->params;
@@ -167,7 +188,6 @@ namespace Chinwei6\LinePay {
 
     /**
      * ReserveParams Class
-     * Reserve 請求的參數
      */
     class ReserveParams extends Params {
         // 必要欄位
@@ -183,7 +203,6 @@ namespace Chinwei6\LinePay {
 
     /**
      * ConfirmParams Class
-     * Confirm 請求的參數
      */
     class ConfirmParams extends Params {
         // 必要欄位
@@ -195,22 +214,20 @@ namespace Chinwei6\LinePay {
 
     /**
      * CheckPaymentsParams Class
-     * Check Payment 請求的參數
      */
     class CheckPaymentParams extends Params {
         protected $requiredFields = []; 
 
-        protected function valitate($params) {
-            parent::valitate($params);
+        protected function validate($params) {
+            parent::validate($params);
 
-            if( !isset($this->params['orderId']) && !isset($this->params['transactionId']) )
+            if( empty($this->params['orderId']) && empty($this->params['transactionId']) )
                 throw new \Exception('Parameter "orderId" or "transactionId" is required.');
         }
     }
 
     /**
      * RefundParams Class
-     * Refund 請求的參數
      */
     class RefundParams extends Params {
         protected $requiredFields = []; 
