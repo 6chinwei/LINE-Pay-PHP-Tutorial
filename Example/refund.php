@@ -18,7 +18,7 @@
         </header>
 
         <div class="container">
-            <form class="form-horizontal" id="recordForm">
+            <form class="form-horizontal" id="refundForm">
                 <?php include('./blocks/api_basic_info.php'); ?>
                 
                 <div class="panel">
@@ -29,24 +29,24 @@
                         <div class="ctrl-grp columns-12">
                             <label class="ctrl-label col-3">交易編號(transactionId)</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="transactionId" value="">
+                                <input type="text" class="ctrl-input" name="transactionId" value="" required>
                             </div>
                         </div>
                         <div class="ctrl-grp columns-12">
-                            <label class="ctrl-label col-3">商家訂單編號(orderId)</label>
+                            <label class="ctrl-label col-3">退款金額</label>
                             <div class="ctrls col-9">
-                                <input type="text" class="ctrl-input" name="orderId" value="">
+                                <input type="text" class="ctrl-input" name="refundAmount" value="" >
                             </div>
                         </div>
                         <div class="columns-12">
                             <div class="col-9 col-offset-3">
-                                ＊交易編號與商家訂單編號至少要填一項
+                                ＊若退款金額不填，表示全額退款
                             </div>
                         </div>
                     </div>
                     <div class="ctrl-grp columns-12">
                         <div class="ctrls col-9 col-offset-3">
-                            <input type="hidden" name="checkPaymentSubmit" value="ture">
+                            <input type="hidden" name="refundSubmit" value="true">
                             <input type="submit" class="btn color-primary" value="送出"> 
                         </div>
                     </div>

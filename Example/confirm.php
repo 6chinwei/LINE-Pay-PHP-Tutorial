@@ -16,7 +16,7 @@ session_start();
     </head>
     <body>
         <header>
-            <?php include('./header.php'); ?>
+            <?php include('./blocks/header.php'); ?>
         </header>
 
         <?php include('./payment_steps.php'); ?>

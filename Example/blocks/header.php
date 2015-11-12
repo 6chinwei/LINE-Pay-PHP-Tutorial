@@ -7,7 +7,10 @@
         <div class="navbar-content">
             <ul class="navbar-nav right">
                 <li class="navbar-nav-item <?php echo isActive('index.php').' '.isActive('reserve.php').' '.isActive('confirm.php');  ?>">
-                    <a class="navbar-nav-link" href="index.php">支付測試</a>
+                    <a class="navbar-nav-link" href="index.php">付款</a>
+                </li>
+                <li class="navbar-nav-item <?php echo isActive('refund.php'); ?>">
+                    <a class="navbar-nav-link" href="refund.php">退款</a>
                 </li>
                 <li class="navbar-nav-item <?php echo isActive('record.php'); ?>">
                     <a class="navbar-nav-link" href="record.php">付款記錄查詢</a>
