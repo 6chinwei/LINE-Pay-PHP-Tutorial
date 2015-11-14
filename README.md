@@ -15,7 +15,8 @@
 
 ### 教學文章
 * [一般付款 (Reserve & Confirm)](Tutorial/payment.md)
+* [付款記錄查詢](Tutorial/get_payment.md)
+* [退款 (Refund)](Tutorial/refund.md)
+* 授權紀錄查詢
+* 授權作廢
 * 自動付款
-* 付款與授權紀錄查詢
-* 請款與授權作廢
-* 退款
